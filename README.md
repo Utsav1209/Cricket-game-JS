@@ -27,10 +27,6 @@ A simple web-based cricket game where players compete against the computer. Choo
 2. See the result in the popup message.
 3. Repeat until the game ends.
 
-## Live Demo
-
-[Play the Game](http://127.0.0.1:5501/cricket.html)
-
 ## Contributing
 
 Contributions are welcome! Feel free to submit issues or pull requests to improve the game.
