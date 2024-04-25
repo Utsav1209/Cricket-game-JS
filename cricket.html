@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 495px;
+            background-image: url('./cricket2.webp');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .container {
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #resultPopup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .popupContent {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            width: 300px;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            0% {
+                top: -200px;
+            }
+
+            100% {
+                top: 50%;
+            }
+        }
+
+        .popupText {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .popupScore {
+            font-size: 26px;
+            color: #782b2b;
+        }
+
+        #scoreboard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            margin-top: 20px;
+            animation: slideIn 1s ease;
+        }
+
+        .score {
+            padding: 0 10px;
+        }
+
+        @keyframes scoreAnimation {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .scoreAnimation {
+            animation: scoreAnimation 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="https://static.vecteezy.com/system/resources/previews/000/367/194/non_2x/vector-cricket-championship-logo.jpg"
+            alt="Cricket Logo" class="logo">
+        <h1>Cricket Game</h1>
+        <button id="bat"><img src="bat1.webp" alt="" height="20px" width="20px"></button>
+        <button id="ball"><img
+                src="https://static.vecteezy.com/system/resources/previews/013/478/071/original/cricket-ball-icon-png.png"
+                alt="" height="20px" width="20px"></button>
+        <button id="stump"><img
+                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/cricket-stumps-4399313-3756980.png" alt=""
+                height="20px"></button>
+        <div id="resultPopup">
+            <div class="popupContent" id="popupContent">
+                <div class="popupText" id="popupText"></div>
+                <div class="popupScore" id="popupScore"></div>
+            </div>
+        </div>
+        <div id="scoreboard">
+            <div class="score" id="userScore">User: 0</div>
+            <div class="score">-</div>
+            <div class="score" id="computerScore">Computer: 0</div>
+        </div>
+    </div>
+    <script>
+        let userScore = 0;
+        let computerScore = 0;
+
+        function computerChoice() {
+            const choices = ['bat', 'ball', 'stump'];
+            const randomIndex = Math.floor(Math.random() * choices.length);
+            return choices[randomIndex];
+        }
+
+        function play(userChoice) {
+            const computer = computerChoice();
+            let result = "";
+
+            if (userChoice === computer) {
+                result = "It's a tie!";
+            } else if (
+                (userChoice === "bat" && computer === "ball") ||
+                (userChoice === "ball" && computer === "stump") ||
+                (userChoice === "stump" && computer === "bat")
+            ) {
+                userScore++;
+                result = "You win!";
+            } else {
+                computerScore++;
+                result = "Computer wins!";
+            }
+
+            document.getElementById("popupText").innerHTML = `You chose ${userChoice}, computer chose ${computer}. ${result}`;
+            document.getElementById("popupScore").innerHTML = `User: ${userScore} | Computer: ${computerScore}`;
+            document.getElementById("resultPopup").style.display = "block";
+            document.getElementById("bat").disabled = true;
+            document.getElementById("ball").disabled = true;
+            document.getElementById("stump").disabled = true;
+
+            updateScoreboard();
+
+            setTimeout(closePopup, 2000); // Close popup after 2 seconds
+        }
+
+        function updateScoreboard() {
+            document.getElementById("userScore").innerHTML = `User: ${userScore}`;
+            document.getElementById("computerScore").innerHTML = `Computer: ${computerScore}`;
+
+            document.getElementById("userScore").classList.add("scoreAnimation");
+            document.getElementById("computerScore").classList.add("scoreAnimation");
+
+            setTimeout(function () {
+                document.getElementById("userScore").classList.remove("scoreAnimation");
+                document.getElementById("computerScore").classList.remove("scoreAnimation");
+            }, 500);
+        }
+
+        function closePopup() {
+            document.getElementById("resultPopup").style.display = "none";
+            document.getElementById("bat").disabled = false;
+            document.getElementById("ball").disabled = false;
+            document.getElementById("stump").disabled = false;
+        }
+
+        document.getElementById("bat").addEventListener("click", function () {
+            play("bat");
+        });
+        document.getElementById("ball").addEventListener("click", function () {
+            play("ball");
+        });
+        document.getElementById("stump").addEventListener("click", function () {
+            play("stump");
+        });
+
+        document.getElementById("resultPopup").addEventListener("click", closePopup);
+        document.getElementById("popupContent").addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+    </script>
+</body>
+
+</html>
